@@ -1,66 +1,73 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Projet de Réservation de Voitures et Trajets
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Ce projet permet la gestion des réservations de voitures pour des trajets entre différentes villes. Les utilisateurs peuvent réserver des trajets, choisir une voiture, et payer pour leurs réservations. Ce système est construit avec Laravel et utilise une base de données MySQL pour stocker les informations relatives aux utilisateurs, aux villes, aux trajets, aux voitures et aux réservations.
 
-## About Laravel
+## Structure de la Base de Données
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Voici un aperçu de la structure de la base de données utilisée pour ce projet. La base de données est composée des tables suivantes :
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. **`cities`** : Table des Villes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Cette table contient les informations des villes disponibles pour les trajets.
 
-## Learning Laravel
+| Colonne     | Type        | Description                              |
+|-------------|-------------|------------------------------------------|
+| `id`        | BIGINT      | Identifiant unique de la ville (PK)      |
+| `name`      | VARCHAR(255)| Nom de la ville, unique                  |
+| `created_at`| TIMESTAMP   | Date et heure de création                |
+| `updated_at`| TIMESTAMP   | Date et heure de la dernière mise à jour |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. **`cars`** : Table des Voitures
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Cette table contient les informations des voitures disponibles pour la réservation.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Colonne            | Type        | Description                                              |
+|--------------------|-------------|----------------------------------------------------------|
+| `id`               | BIGINT      | Identifiant unique de la voiture (PK)                    |
+| `name`             | VARCHAR(255)| Nom de la voiture                                         |
+| `seating_capacity` | TINYINT     | Capacité de sièges de la voiture (par défaut 4)           |
+| `color`            | VARCHAR(20) | Couleur de la voiture (facultatif)                        |
+| `image_url`        | VARCHAR(255)| URL de l'image de la voiture (facultatif)                 |
+| `price_per_km`     | DECIMAL(5,2)| Prix par kilomètre de la voiture (facultatif)             |
+| `created_at`       | TIMESTAMP   | Date et heure de création                                |
+| `updated_at`       | TIMESTAMP   | Date et heure de la dernière mise à jour                 |
 
-## Laravel Sponsors
+### 3. **`routes`** : Table des Trajets
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Cette table contient les informations sur les trajets entre les villes.
 
-### Premium Partners
+| Colonne              | Type        | Description                                                      |
+|----------------------|-------------|------------------------------------------------------------------|
+| `id`                 | BIGINT      | Identifiant unique du trajet (PK)                                |
+| `departure_city_id`  | BIGINT      | Référence à la ville de départ (`cities.id`), peut être NULL     |
+| `arrival_city_id`    | BIGINT      | Référence à la ville d'arrivée (`cities.id`), peut être NULL     |
+| `distance_km`        | DECIMAL(6,2)| Distance du trajet en kilomètres (facultatif)                    |
+| `duration`           | TIME        | Durée du trajet (facultatif)                                     |
+| `created_at`         | TIMESTAMP   | Date et heure de création                                        |
+| `updated_at`         | TIMESTAMP   | Date et heure de la dernière mise à jour                         |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 4. **`reservations`** : Table des Réservations
 
-## Contributing
+Cette table contient les informations relatives aux réservations effectuées par les utilisateurs.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Colonne             | Type        | Description                                                       |
+|---------------------|-------------|-------------------------------------------------------------------|
+| `id`                | BIGINT      | Identifiant unique de la réservation (PK)                         |
+| `user_id`           | BIGINT      | Référence à l'utilisateur ayant effectué la réservation (`users.id`) |
+| `route_id`          | BIGINT      | Référence au trajet réservé (`routes.id`)                         |
+| `car_id`            | BIGINT      | Référence à la voiture réservée (`cars.id`)                       |
+| `departure_datetime`| DATETIME    | Date et heure de départ de la réservation                         |
+| `arrival_datetime`  | DATETIME    | Date et heure d'arrivée prévue de la réservation (facultatif)     |
+| `additional_info`   | TEXT        | Informations supplémentaires concernant la réservation (facultatif)|
+| `session_id`        | VARCHAR(100)| Identifiant de la session de réservation                         |
+| `payment_status`    | ENUM        | Statut du paiement : `unpaid`, `paid`, `pending` (par défaut `unpaid`)|
+| `price`             | DECIMAL(10,2)| Prix total de la réservation (facultatif)                        |
+| `created_at`        | TIMESTAMP   | Date et heure de création de la réservation                       |
+| `updated_at`        | TIMESTAMP   | Date et heure de la dernière mise à jour                          |
 
-## Code of Conduct
+## Relations entre les tables
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **`users`** → **`reservations`** : Un utilisateur peut avoir plusieurs réservations.
+- **`routes`** → **`reservations`** : Un trajet peut être réservé plusieurs fois.
+- **`cars`** → **`reservations`** : Une voiture peut être réservée plusieurs fois.
+- **`cities`** → **`routes`** : Une ville peut être la ville de départ ou d'arrivée pour plusieurs trajets.
