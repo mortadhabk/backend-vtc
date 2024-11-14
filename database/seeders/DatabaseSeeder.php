@@ -16,12 +16,14 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         
+        
         $this->call([
             UsersTableSeeder::class,
             CitiesTableSeeder::class,
             CarsTableSeeder::class,
             RoutesTableSeeder::class,
             ReservationsTableSeeder::class,
+            RolesAndPermissionsSeeder::class,
         ]);
     }
 }

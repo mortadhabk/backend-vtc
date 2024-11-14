@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         DB::table('users')->insert([
-            ['name' => 'Alice', 'email' => 'alice@example.com', 'password' => bcrypt('password')],
+            ['name' => 'Mortadha Boubaker', 'email' => 'mortadhaboubaker12@gmail.com', 'password' => bcrypt('12022000$')],
             ['name' => 'Bob', 'email' => 'bob@example.com', 'password' => bcrypt('password')],
             ['name' => 'Charlie', 'email' => 'charlie@example.com', 'password' => bcrypt('password')],
             ['name' => 'David', 'email' => 'david@example.com', 'password' => bcrypt('password')],
